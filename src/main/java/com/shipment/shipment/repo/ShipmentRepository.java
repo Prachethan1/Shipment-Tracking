@@ -16,7 +16,7 @@ public class ShipmentRepository {
         return shipment;
     }
 
-    public Shipment findById(String orderId) {
-        return store.get(orderId);
+    public Optional<Shipment> findById(String orderId) {
+        return Optional.ofNullable(store.get(orderId));
     }
 }

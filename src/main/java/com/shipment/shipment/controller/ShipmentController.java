@@ -1,6 +1,7 @@
 package com.shipment.shipment.controller;
 
 import com.shipment.shipment.model.Shipment;
+import com.shipment.shipment.model.ShipmentStatus;
 import com.shipment.shipment.service.ShipmentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,5 +27,24 @@ public class ShipmentController {
     @GetMapping("/{orderId}")
     public ResponseEntity<Shipment> get(@PathVariable String orderId){
         return ResponseEntity.ok(service.getShipment(orderId));
+    }
+
+    @PatchMapping("/{orderId}")
+    public ResponseEntity<Shipment> updateStatus(@PathVariable String orderId, @RequestBody StatusUpdate statusUpdate) {
+        ShipmentStatus target;
+        try {
+            target = ShipmentStatus.valueOf(statusUpdate.getStatus().toUpperCase().replace('-', '_'));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+        Shipment updated = service.updateStatus(orderId, target);
+        return ResponseEntity.ok(updated);
+    }
+
+    public static class StatusUpdate {
+        private String status;
+        public StatusUpdate() {}
+        public String getStatus() { return status; }
+        public void setStatus(String status) { this.status = status; }
     }
 }
