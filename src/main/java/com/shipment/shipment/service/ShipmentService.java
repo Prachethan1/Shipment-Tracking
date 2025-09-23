@@ -7,6 +7,7 @@ import com.shipment.shipment.model.ShipmentStatus;
 import com.shipment.shipment.repo.ShipmentRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -37,5 +38,9 @@ public class ShipmentService {
         existing.setStatus(newStatus);
         repository.save(existing);
         return existing;
+    }
+
+    public List<Shipment> listShipments(Optional<String> statusOpt, Optional<String> originOpt) {
+        return repository.findByStatusAndOrigin(statusOpt.map(String::toUpperCase), originOpt);
     }
 }

@@ -7,6 +7,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/shipments")
 public class ShipmentController {
@@ -39,6 +42,11 @@ public class ShipmentController {
         }
         Shipment updated = service.updateStatus(orderId, target);
         return ResponseEntity.ok(updated);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Shipment>> list(@RequestParam Optional<String> status, @RequestParam Optional<String> origin) {
+        return ResponseEntity.ok(service.listShipments(status, origin));
     }
 
     public static class StatusUpdate {
